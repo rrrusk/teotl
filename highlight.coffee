@@ -1,20 +1,79 @@
-text = """
+code = """
 <script src="./string"></script>
 """
+html = ""
 
-syntax = ""
-highlight = (code) ->
-  switch
-    when code.length <= 0
-      return syntax
-    when (/^"/).test(code)
-      syntax += "<quote>\"</quote>"
-      code = code.replace(/^"/,"")
-      highlight(code)
-    when (/^./).test(code)
-      syntax += RegExp.lastMatch
-      code = code.replace(/^./,"")
-      highlight(code)
+defo = """
+  var nibe = function (){
+    switch (false) {
+      case !(code === ""):
+        return html;
+        break;
+      case !/^"/.test(code):
+        html += "</quote>"+RegExp.lastMatch;
+        code = code.replace(/^"/, "");
+        highlight(quote);
+        break;
+      case !/^</.test(code):
+        html += "<bracket>"+RegExp.lastMatch;
+        code = code.replace(/^</, "");
+        highlight(defo);
+        break;
+      case !/^>/.test(code):
+        html += RegExp.lastMatch+"</bracket>";
+        code = code.replace(/^>/, "");
+        highlight(defo);
+        break;
+      case !/^./.test(code):
+        html += RegExp.lastMatch;
+        code = code.replace(/^./, "");
+        highlight(defo);
+        break;
+    }
+  }
+"""
+quote = """
+  var nibe = function (){
+    switch (false) {
+      case !(code === ""):
+        return html;
+        break;
+      case !/^"/.test(code):
+        html += RegExp.lastMatch+"</quote>";
+        code = code.replace(/^"/, "");
+        highlight(defo);
+        break;
+      case !/^./.test(code):
+        html += RegExp.lastMatch;
+        code = code.replace(/^./, "");
+        highlight(quote);
+        break;
+    }
+  }
+"""
+bracket = """
+  var nibe = function (){
+    switch (false) {
+      case !(code === ""):
+        return html;
+        break;
+      case !/^>/.test(code):
+        html += RegExp.lastMatch+"</bracket>";
+        code = code.replace(/^>/, "");
+        highlight(defo);
+        break;
+      case !/^./.test(code):
+        html += RegExp.lastMatch;
+        code = code.replace(/^./, "");
+        highlight(bracket);
+        break;
+    }
+  }
+"""
 
-console.log text
-console.log highlight(text)
+highlight = (rule) ->
+  eval(rule)
+  nibe()
+  html
+
+console.log highlight(defo)
