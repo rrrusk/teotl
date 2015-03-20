@@ -1,79 +1,81 @@
 code = """
-<script src="./string"></script>
+console.log("fwei");
 """
 html = ""
 
-defo = """
-  var nibe = function (){
-    switch (false) {
+syntax = {
+  "patterns":[
+    {
+      'begin': '"'
+      'beginCaptures':
+        '0':
+          'name': 'punctuation.definition.string.begin.js'
+      'end': '"'
+      'endCaptures':
+        '0':
+          'name': 'punctuation.definition.string.end.js'
+      'name': 'string.quoted.double.js'
+      'patterns': [
+        {
+          'match': '\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)'
+          'name': 'constant.character.escape.js'
+        }
+      ]
+    }
+    {
+      'match': '\\b(console)\\b'
+      'name': 'entity.name.type.object.js.firebug'
+    }
+  ]
+}
+
+liquidBefore = """
+var nibe = function(){
+  switch (false) {
       case !(code === ""):
         return html;
         break;
-      case !/^"/.test(code):
-        html += "</quote>"+RegExp.lastMatch;
-        code = code.replace(/^"/, "");
-        highlight(quote);
-        break;
-      case !/^</.test(code):
-        html += "<bracket>"+RegExp.lastMatch;
-        code = code.replace(/^</, "");
-        highlight(defo);
-        break;
-      case !/^>/.test(code):
-        html += RegExp.lastMatch+"</bracket>";
-        code = code.replace(/^>/, "");
-        highlight(defo);
-        break;
+"""
+
+liquidAfter = """
       case !/^./.test(code):
         html += RegExp.lastMatch;
         code = code.replace(/^./, "");
-        highlight(defo);
+        highlight(liquid);
         break;
-    }
   }
+}
 """
-quote = """
-  var nibe = function (){
-    switch (false) {
-      case !(code === ""):
-        return html;
+
+liquidCenter = ""
+
+ends = []
+for pattern in syntax["patterns"]
+  if pattern["begin"]
+    liquidCenter += """
+      case !/^#{pattern["begin"]}/.test(code):
+        html += "<span class=\\"#{pattern["name"]}\\">"+RegExp.lastMatch;
+        code = code.replace(/^#{pattern["begin"]}/, "");
+        highlight(liquid);
         break;
-      case !/^"/.test(code):
-        html += RegExp.lastMatch+"</quote>";
-        code = code.replace(/^"/, "");
-        highlight(defo);
+
+    """
+  if pattern["match"]
+    liquidCenter += """
+      case !/^#{pattern["match"]}/.test(code):
+        html += "<span class=\\"#{pattern["name"]}\\">"+RegExp.lastMatch+"</span>";
+        code = code.replace(/^#{pattern["match"]}/, "");
+        highlight(liquid);
         break;
-      case !/^./.test(code):
-        html += RegExp.lastMatch;
-        code = code.replace(/^./, "");
-        highlight(quote);
-        break;
-    }
-  }
-"""
-bracket = """
-  var nibe = function (){
-    switch (false) {
-      case !(code === ""):
-        return html;
-        break;
-      case !/^>/.test(code):
-        html += RegExp.lastMatch+"</bracket>";
-        code = code.replace(/^>/, "");
-        highlight(defo);
-        break;
-      case !/^./.test(code):
-        html += RegExp.lastMatch;
-        code = code.replace(/^./, "");
-        highlight(bracket);
-        break;
-    }
-  }
-"""
+
+    """
+
+liquid = liquidBefore+liquidCenter+liquidAfter
+console.log liquidCenter
 
 highlight = (rule) ->
   eval(rule)
   nibe()
   html
 
-console.log highlight(defo)
+console.log highlight(liquid)
