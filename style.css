@@ -1,0 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+html,body {
+  height: 100%;
+}
+#wrap {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+#sidebar {
+  width: 300px;
+  height: 100%;
+  overflow: scroll;
+}
+#main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#tabbar {
+  background: #0F0;
+  height: 40px;
+}
+#code {
+  background: #F00;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+#statusbar {
+  background: #FF0;
+  height: 40px;
+}
+.folder:before {
+  content: "$$"
+}
+.file:before {
+  content: "##"
+}
